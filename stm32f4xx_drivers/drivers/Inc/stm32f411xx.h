@@ -1,0 +1,63 @@
+/*
+ * stm32f411xx.h
+ *
+ *  Created on: Aug 25, 2024
+ *      Author: manhcuong
+ */
+
+#ifndef INC_STM32F411XX_H_
+#define INC_STM32F411XX_H_
+
+/*
+ * Base addresses of FLASH and SRAM memories
+ */
+
+#define FLASH_BASEADDR			0x08000000U
+#define SRAM_BASEADDR			0x20000000U
+#define ROM_BASEADDR			0x1FFF0000U
+#define SRAM					SRAM_BASEADDR
+
+/*
+ * Base addresses of AHBx and APBx Bus peripheral
+ */
+
+#define PERIPH_BASEADDR			0x40000000U
+#define APB1PERIPH_BASEADDR		0x40000000U
+#define APB2PERIPH_BASEADDR		0x40010000U
+#define AHB1PERIPH_BASEADDR		0x40020000U
+#define AHB2PERIPH_BASEADDR		0x50000000U
+
+/*
+ * Base addresses of peripherals which are hanging on AHB1 bus
+ */
+
+#define GPIOA_BASEADDR 			(AHB1PERIPH_BASEADDR + 0x0000U)
+#define GPIOB_BASEADDR 			(AHB1PERIPH_BASEADDR + 0x0400U)
+#define GPIOC_BASEADDR 			(AHB1PERIPH_BASEADDR + 0x0800U)
+#define GPIOD_BASEADDR 			(AHB1PERIPH_BASEADDR + 0x0C00U)
+#define GPIOE_BASEADDR 			(AHB1PERIPH_BASEADDR + 0x1000U)
+#define GPIOH_BASEADDR 			(AHB1PERIPH_BASEADDR + 0x1C00U)
+
+/*
+ * Base addresses of peripherals which are hanging on APB1 bus
+ */
+
+#define SPI2_BASEADDR 			(APB1PERIPH_BASEADDR + 0x3800U)
+#define SPI3_BASEADDR 			(APB1PERIPH_BASEADDR + 0x3C00U)
+#define USART2_BASEADDR 		(APB1PERIPH_BASEADDR + 0x4400U)
+#define I2C1_BASEADDR 			(APB1PERIPH_BASEADDR + 0x5400U)
+#define I2C2_BASEADDR 			(APB1PERIPH_BASEADDR + 0x5800U)
+#define I2C3_BASEADDR 			(APB1PERIPH_BASEADDR + 0x5C00U)
+
+/*
+ * Base addresses of peripherals which are hanging on APB2 bus
+ */
+
+#define USART1_BASEADDR 		(APB2PERIPH_BASEADDR + 0x1000U)
+#define USART6_BASEADDR 		(APB2PERIPH_BASEADDR + 0x1400U)
+#define SPI1_BASEADDR 			(APB2PERIPH_BASEADDR + 0x3000U)
+#define SPI4_BASEADDR 			(APB2PERIPH_BASEADDR + 0x3400U)
+#define SYSCFG_BASEADDR 		(APB2PERIPH_BASEADDR + 0x3800U)
+#define EXTI_BASEADDR 			(APB2PERIPH_BASEADDR + 0x3C00U)
+
+#endif /* INC_STM32F411XX_H_ */

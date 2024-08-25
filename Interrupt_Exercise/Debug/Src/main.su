@@ -1,0 +1,4 @@
+../Src/main.c:33:6:set_priority	24	static
+../Src/main.c:43:5:main	24	static
+../Src/main.c:70:6:USART2_IRQHandler	4	static
+../Src/main.c:78:6:TIM5_IRQHandler	4	static
