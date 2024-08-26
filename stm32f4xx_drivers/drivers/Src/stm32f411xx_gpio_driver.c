@@ -148,5 +148,26 @@ void GPIO_Init(GPIO_Handle_t *pGPIOHandle)
  */
 void GPIO_DeInit(GPIO_RegDef_t *pGPIOx)
 {
-
+	switch ((uint32_t)pGPIOx){
+		case GPIOA_BASEADDR:
+			GPIOA_REG_RESET();
+			break;
+		case GPIOB_BASEADDR:
+			GPIOB_REG_RESET();
+			break;
+		case GPIOC_BASEADDR:
+			GPIOC_REG_RESET();
+			break;
+		case GPIOD_BASEADDR:
+			GPIOD_REG_RESET();
+			break;
+		case GPIOE_BASEADDR:
+			GPIOE_REG_RESET();
+			break;
+		case GPIOH_BASEADDR:
+			GPIOH_REG_RESET();
+			break;
+		default:
+			break;
+	}
 }

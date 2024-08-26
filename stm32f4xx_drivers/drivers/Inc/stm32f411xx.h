@@ -226,6 +226,16 @@ typedef struct
 #define SYSCFG_PCLK_DI() 			(RCC->APB2ENR &= ~(1 << 14))
 
 /*
+ * Macros to reset GPIOx registers
+ */
+#define GPIOA_REG_RESET()		(RCC->AHB1RSTR |= (1 << 0)); (RCC->AHB1RSTR &= ~(1 << 0))
+#define GPIOB_REG_RESET()		(RCC->AHB1RSTR |= (1 << 1)); (RCC->AHB1RSTR &= ~(1 << 1))
+#define GPIOC_REG_RESET()		(RCC->AHB1RSTR |= (1 << 2)); (RCC->AHB1RSTR &= ~(1 << 2))
+#define GPIOD_REG_RESET()		(RCC->AHB1RSTR |= (1 << 3)); (RCC->AHB1RSTR &= ~(1 << 3))
+#define GPIOE_REG_RESET()		(RCC->AHB1RSTR |= (1 << 4)); (RCC->AHB1RSTR &= ~(1 << 4))
+#define GPIOH_REG_RESET()		(RCC->AHB1RSTR |= (1 << 7)); (RCC->AHB1RSTR &= ~(1 << 7))
+
+/*
  * Some generic macros
  */
 #define ENABLE 						1U

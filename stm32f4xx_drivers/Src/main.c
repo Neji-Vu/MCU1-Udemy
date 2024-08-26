@@ -42,6 +42,8 @@ int main(void)
 
 	GPIO_Init(&pGPIOHandle);
 
+	GPIO_DeInit(GPIOB);
+
     /* Loop forever */
 	for(;;);
 }
