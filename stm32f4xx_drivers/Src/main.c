@@ -26,8 +26,8 @@
 
 int main(void)
 {
-	RCC->AHB1ENR = 1;
-	GPIOA->LCKR = 1;
+	RCC->AHB1ENR |= (1 << 0);
+	GPIOA->MODER |= (0x3 << 0);
     /* Loop forever */
 	for(;;);
 }

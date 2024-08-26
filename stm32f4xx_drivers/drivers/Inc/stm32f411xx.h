@@ -62,6 +62,7 @@
 #define USART6_BASEADDR 		(APB2PERIPH_BASEADDR + 0x1400U)
 #define SPI1_BASEADDR 			(APB2PERIPH_BASEADDR + 0x3000U)
 #define SPI4_BASEADDR 			(APB2PERIPH_BASEADDR + 0x3400U)
+#define SPI5_BASEADDR 			(APB2PERIPH_BASEADDR + 0x5000U)
 #define SYSCFG_BASEADDR 		(APB2PERIPH_BASEADDR + 0x3800U)
 #define EXTI_BASEADDR 			(APB2PERIPH_BASEADDR + 0x3C00U)
 
@@ -92,42 +93,136 @@ typedef struct
 	__vo uint32_t CIR;			/* Offset: 0x0C, RCC clock interrupt register */
 	__vo uint32_t AHB1RSTR;		/* Offset: 0x10, RCC AHB1 peripheral reset register */
 	__vo uint32_t AHB2RSTR;		/* Offset: 0x14, RCC AHB2 peripheral reset register */
-	__vo uint32_t Reserved1;	/* Offset: 0x18 */
-	__vo uint32_t Reserved2;	/* Offset: 0x1C */
+	uint32_t 	  RESERVED1;	/* Offset: 0x18 */
+	uint32_t 	  RESERVED2;	/* Offset: 0x1C */
 	__vo uint32_t APB1RSTR;		/* Offset: 0x20, RCC APB1 peripheral reset register */
 	__vo uint32_t APB2RSTR;		/* Offset: 0x24, RCC APB2 peripheral reset register */
-	__vo uint32_t Reserved3;	/* Offset: 0x28 */
-	__vo uint32_t Reserved4;	/* Offset: 0x2C */
+	uint32_t 	  RESERVED3;	/* Offset: 0x28 */
+	uint32_t 	  RESERVED4;	/* Offset: 0x2C */
 	__vo uint32_t AHB1ENR;		/* Offset: 0x30, RCC AHB1 peripheral clock enable register */
 	__vo uint32_t AHB2ENR;		/* Offset: 0x34, RCC AHB2 peripheral clock enable register */
-	__vo uint32_t Reserved5;	/* Offset: 0x38 */
-	__vo uint32_t Reserved6;	/* Offset: 0x3C */
+	uint32_t 	  RESERVED5;	/* Offset: 0x38 */
+	uint32_t 	  RESERVED6;	/* Offset: 0x3C */
 	__vo uint32_t APB1ENR;		/* Offset: 0x40, RCC APB1 peripheral clock enable register */
 	__vo uint32_t APB2ENR;		/* Offset: 0x44, RCC APB2 peripheral clock enable register */
-	__vo uint32_t Reserved7;	/* Offset: 0x48 */
-	__vo uint32_t Reserved8;	/* Offset: 0x4C */
+	uint32_t 	  RESERVED7;	/* Offset: 0x48 */
+	uint32_t 	  RESERVED8;	/* Offset: 0x4C */
 	__vo uint32_t AHB1LPENR;	/* Offset: 0x50, RCC AHB1 peripheral clock enable in low power mode register */
 	__vo uint32_t AHB2LPENR;	/* Offset: 0x54, RCC AHB2 peripheral clock enable in low power mode register */
-	__vo uint32_t Reserved9;	/* Offset: 0x58 */
-	__vo uint32_t Reserved10;	/* Offset: 0x5C */
+	uint32_t 	  RESERVED9;	/* Offset: 0x58 */
+	uint32_t 	  RESERVED10;	/* Offset: 0x5C */
 	__vo uint32_t APB1LPENR;	/* Offset: 0x60, RCC APB1 peripheral clock enabled in low power mode register */
 	__vo uint32_t APB2LPENR;	/* Offset: 0x64, RCC APB2 peripheral clock enabled in low power mode register */
-	__vo uint32_t Reserved11;	/* Offset: 0x68 */
-	__vo uint32_t Reserved12;	/* Offset: 0x6C */
+	uint32_t 	  RESERVED11;	/* Offset: 0x68 */
+	uint32_t 	  RESERVED12;	/* Offset: 0x6C */
 	__vo uint32_t BDCR;			/* Offset: 0x70, RCC Backup domain control register */
 	__vo uint32_t CSR;			/* Offset: 0x74, RCC clock control & status register */
-	__vo uint32_t Reserved13;	/* Offset: 0x78 */
-	__vo uint32_t Reserved14;	/* Offset: 0x7C */
+	uint32_t 	  RESERVED13;	/* Offset: 0x78 */
+	uint32_t 	  RESERVED14;	/* Offset: 0x7C */
 	__vo uint32_t SSCGR;		/* Offset: 0x80, RCC spread spectrum clock generation register */
 	__vo uint32_t PLLI2SCFGR;	/* Offset: 0x84, RCC PLLI2S configuration register */
-	__vo uint32_t Reserved15;	/* Offset: 0x88 */
+	uint32_t 	  RESERVED15;	/* Offset: 0x88 */
 	__vo uint32_t DCKCFGR;		/* Offset: 0x8C, RCC Dedicated Clocks Configuration Register*/
 }RCC_RegDef_t;
 
 /*
  * Peripheral definitions (Peripheral base addresses typecasted to xxx_RegDef_t
  */
-#define GPIOA 					( (GPIO_RegDef_t*) GPIOA_BASEADDR )
-#define RCC						( (RCC_RegDef_t*) RCC_BASEADDR )
+
+#define GPIOA 					((GPIO_RegDef_t*) GPIOA_BASEADDR)
+#define GPIOB 					((GPIO_RegDef_t*) GPIOB_BASEADDR)
+#define GPIOC 					((GPIO_RegDef_t*) GPIOC_BASEADDR)
+#define GPIOD 					((GPIO_RegDef_t*) GPIOD_BASEADDR)
+#define GPIOE 					((GPIO_RegDef_t*) GPIOE_BASEADDR)
+#define GPIOH 					((GPIO_RegDef_t*) GPIOH_BASEADDR)
+
+#define RCC						((RCC_RegDef_t*) RCC_BASEADDR)
+
+/*
+ * Clock Enable Macros for GPIOx peripherals
+ */
+
+#define GPIOA_PCLK_EN() 		(RCC->AHB1ENR |= (1 << 0));
+#define GPIOB_PCLK_EN() 		(RCC->AHB1ENR |= (1 << 1));
+#define GPIOC_PCLK_EN() 		(RCC->AHB1ENR |= (1 << 2));
+#define GPIOD_PCLK_EN() 		(RCC->AHB1ENR |= (1 << 3));
+#define GPIOE_PCLK_EN() 		(RCC->AHB1ENR |= (1 << 4));
+#define GPIOH_PCLK_EN() 		(RCC->AHB1ENR |= (1 << 7));
+
+/*
+ * Clock Enable Macros for I2Cx peripherals
+ */
+
+#define I2C1_PCLK_EN() 			(RCC->APB1ENR |= (1 << 21));
+#define I2C2_PCLK_EN() 			(RCC->APB1ENR |= (1 << 22));
+#define I2C3_PCLK_EN() 			(RCC->APB1ENR |= (1 << 23));
+
+/*
+ * Clock Enable Macros for SPIx peripherals
+ */
+
+#define SPI2_PCLK_EN() 			(RCC->APB1ENR |= (1 << 14));
+#define SPI3_PCLK_EN() 			(RCC->APB1ENR |= (1 << 15));
+#define SPI1_PCLK_EN() 			(RCC->APB2ENR |= (1 << 12));
+#define SPI4_PCLK_EN() 			(RCC->APB2ENR |= (1 << 13));
+#define SPI5_PCLK_EN() 			(RCC->APB2ENR |= (1 << 20));
+
+/*
+ * Clock Enable Macros for USARTx peripherals
+ */
+
+#define USART2_PCLK_EN() 			(RCC->APB1ENR |= (1 << 17));
+#define USART1_PCLK_EN() 			(RCC->APB2ENR |= (1 << 4));
+#define USART6_PCLK_EN() 			(RCC->APB2ENR |= (1 << 5));
+
+/*
+ * Clock Enable Macros for SYSCFG peripherals
+ */
+
+#define SYSCFG_PCLK_EN() 			(RCC->APB2ENR |= (1 << 14));
+
+
+/*
+ * Clock Disable Macros for GPIOx peripherals
+ */
+
+#define GPIOA_PCLK_DI() 		(RCC->AHB1ENR &= ~(1 << 0));
+#define GPIOB_PCLK_DI() 		(RCC->AHB1ENR &= ~(1 << 1));
+#define GPIOC_PCLK_DI() 		(RCC->AHB1ENR &= ~(1 << 2));
+#define GPIOD_PCLK_DI() 		(RCC->AHB1ENR &= ~(1 << 3));
+#define GPIOE_PCLK_DI() 		(RCC->AHB1ENR &= ~(1 << 4));
+#define GPIOH_PCLK_DI() 		(RCC->AHB1ENR &= ~(1 << 7));
+
+/*
+ * Clock Disable Macros for I2Cx peripherals
+ */
+
+#define I2C1_PCLK_DI() 			(RCC->APB1ENR &= ~(1 << 21));
+#define I2C2_PCLK_DI() 			(RCC->APB1ENR &= ~(1 << 22));
+#define I2C3_PCLK_DI() 			(RCC->APB1ENR &= ~(1 << 23));
+
+/*
+ * Clock Diable Macros for SPIx peripherals
+ */
+
+#define SPI2_PCLK_DI() 			(RCC->APB1ENR &= ~(1 << 14));
+#define SPI3_PCLK_DI() 			(RCC->APB1ENR &= ~(1 << 15));
+#define SPI1_PCLK_DI() 			(RCC->APB2ENR &= ~(1 << 12));
+#define SPI4_PCLK_DI() 			(RCC->APB2ENR &= ~(1 << 13));
+#define SPI5_PCLK_DI() 			(RCC->APB2ENR &= ~(1 << 20));
+
+/*
+ * Clock Diable Macros for USARTx peripherals
+ */
+
+#define USART2_PCLK_DI() 			(RCC->APB1ENR &= ~(1 << 17));
+#define USART1_PCLK_DI() 			(RCC->APB2ENR &= ~(1 << 4));
+#define USART6_PCLK_DI() 			(RCC->APB2ENR &= ~(1 << 5));
+
+/*
+ * Clock Disable Macros for SYSCFG peripherals
+ */
+
+#define SYSCFG_PCLK_DI() 			(RCC->APB2ENR &= ~(1 << 14));
 
 #endif /* INC_STM32F411XX_H_ */
