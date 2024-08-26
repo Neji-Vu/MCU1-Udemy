@@ -18,7 +18,8 @@
 
 #include <stdint.h>
 
-#include "stm32f411xx.h"
+//#include "stm32f411xx.h"
+#include "stm32f411xx_gpio_driver.h"
 
 #if !defined(__SOFT_FP__) && defined(__ARM_FP)
   #warning "FPU is not initialized, but the project is compiling for an FPU. Please initialize the FPU before use."
@@ -26,8 +27,21 @@
 
 int main(void)
 {
-	RCC->AHB1ENR |= (1 << 0);
-	GPIOA->MODER |= (0x3 << 0);
+
+	GPIO_PinConfig_t pin = {
+			GPIO_PIN_NO_5,
+			GPIO_MODE_ALTFN,
+			GPIO_SPEED_FAST,
+			0,
+			0,
+			GPIO_ALT_FN_AF5
+	};
+	GPIO_Handle_t pGPIOHandle = {GPIOB, pin};
+
+	GPIO_PeriClockControl(GPIOB, ENABLE);
+
+	GPIO_Init(&pGPIOHandle);
+
     /* Loop forever */
 	for(;;);
 }
