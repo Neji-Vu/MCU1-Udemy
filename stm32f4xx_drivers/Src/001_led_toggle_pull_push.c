@@ -18,8 +18,7 @@
 
 #include <stdint.h>
 
-//#include "stm32f411xx.h"
-#include "stm32f411xx_gpio_driver.h"
+#include "stm32f411xx.h"
 
 #if !defined(__SOFT_FP__) && defined(__ARM_FP)
   #warning "FPU is not initialized, but the project is compiling for an FPU. Please initialize the FPU before use."
@@ -28,22 +27,48 @@
 int main(void)
 {
 
+#if 0 && PULL_PUSH
 	GPIO_PinConfig_t pin = {
-			GPIO_PIN_NO_5,
-			GPIO_MODE_ALTFN,
-			GPIO_SPEED_FAST,
-			0,
-			0,
-			GPIO_ALT_FN_AF5
+			GPIO_PIN_NO_12,
+			GPIO_MODE_OUT,
+			GPIO_SPEED_LOW,
+			GPIO_NO_PUPD,
+			GPIO_OP_TYPE_PP,
+			GPIO_ALT_FN_AF0
 	};
-	GPIO_Handle_t pGPIOHandle = {GPIOB, pin};
+	GPIO_Handle_t pGPIOHandle = {GPIOD, pin};
 
-	GPIO_PeriClockControl(GPIOB, ENABLE);
+	GPIO_PeriClockControl(GPIOD, ENABLE);
 
 	GPIO_Init(&pGPIOHandle);
 
-	GPIO_DeInit(GPIOB);
+    /* Loop forever */
+	for(;;){
+		GPIO_ToggleOutputPin(GPIOD, pin.GPIO_PinNumber);
+		for(uint32_t i = 0 ; i < 500U*1250U ; i++);
+
+	}
+#endif
+
+	GPIO_PinConfig_t pin_10 = {
+			GPIO_PIN_NO_10,
+			GPIO_MODE_OUT,
+			GPIO_SPEED_LOW,
+			GPIO_NO_PUPD,
+			GPIO_OP_TYPE_OD,
+			GPIO_ALT_FN_AF0
+	};
+	GPIO_Handle_t pGPIOHandle = {GPIOD, pin_10};
+
+	GPIO_PeriClockControl(GPIOD, ENABLE);
+
+	GPIO_Init(&pGPIOHandle);
 
     /* Loop forever */
-	for(;;);
+	for(;;){
+		GPIO_ToggleOutputPin(GPIOD, pin_10.GPIO_PinNumber);
+		for(uint32_t i = 0 ; i < 500U*1250U ; i++);
+
+	}
+
 }
