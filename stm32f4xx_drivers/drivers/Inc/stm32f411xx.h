@@ -196,6 +196,19 @@ typedef struct
 	__vo uint32_t CMPCR;		/* Offset: 0x1C, Compensation cell control register */
 }SYSCFG_RegDef_t;
 
+typedef struct
+{
+	__vo uint32_t CR1;			/* Offset: 0x00, SPI control register 1 */
+	__vo uint32_t CR2;			/* Offset: 0x04, SPI control register 2 */
+	__vo uint32_t SR;			/* Offset: 0x08, SPI status register */
+	__vo uint32_t DR;			/* Offset: 0x0C, SPI data register */
+	__vo uint32_t CRCPR;		/* Offset: 0x10, SPI CRC polynomial register */
+	__vo uint32_t RXCRCR;		/* Offset: 0x14, SPI RX CRC register */
+	__vo uint32_t TXCRCR;		/* Offset: 0x18, SPI TX CRC register */
+	__vo uint32_t I2SCFGR;		/* Offset: 0x1C, SPI_I2S configuration register */
+	__vo uint32_t I2SPR;		/* Offset: 0x20, SPI_I2S prescaler register */
+}SPI_RegDef_t;
+
 /*
  * Peripheral definitions (Peripheral base addresses typecasted to xxx_RegDef_t
  */
@@ -210,6 +223,11 @@ typedef struct
 #define RCC						((RCC_RegDef_t*) RCC_BASEADDR)
 #define EXTI					((EXTI_RegDef_t*) EXTI_BASEADDR)
 #define SYSCFG					((SYSCFG_RegDef_t*) SYSCFG_BASEADDR)
+#define SPI1					((SPI_RegDef_t*) SPI1_BASEADDR)
+#define SPI2					((SPI_RegDef_t*) SPI2_BASEADDR)
+#define SPI3					((SPI_RegDef_t*) SPI3_BASEADDR)
+#define SPI4					((SPI_RegDef_t*) SPI4_BASEADDR)
+#define SPI5					((SPI_RegDef_t*) SPI5_BASEADDR)
 
 /*
  * Clock Enable Macros for GPIOx peripherals
@@ -338,5 +356,6 @@ enum IRQ_NO{
 };
 
 #include "stm32f411xx_gpio_driver.h"
+#include "stm32f411xx_spi_driver.h"
 
 #endif /* INC_STM32F411XX_H_ */
