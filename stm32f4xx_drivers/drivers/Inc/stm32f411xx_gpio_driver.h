@@ -44,7 +44,8 @@ enum GPIO_MODE
 	GPIO_MODE_ANALOG 	= 3U,	/* Set GPIO pin as Analog mode */
 	GPIO_MODE_IT_FT 	= 4U,	/* Set GPIO pin as Interrupt with falling edge mode */
 	GPIO_MODE_IT_RT 	= 5U,	/* Set GPIO pin as Interrupt with raising edge mode */
-	GPIO_MODE_IT_RFT 	= 6U	/* Set GPIO pin as Interrupt with raising and falling edge mode */
+	GPIO_MODE_IT_RFT 	= 6U,	/* Set GPIO pin as Interrupt with raising and falling edge mode */
+	GPIO_MODE_DEFAULT 	= 0U	/* Default mode is Input mode */
 };
 
 /*
@@ -56,6 +57,7 @@ enum GPIO_SPEED
 	GPIO_SPEED_MEDIUM 	= 1U,	/* Set output speed as Medium */
 	GPIO_SPEED_FAST 	= 2U,	/* Set output speed as Fast */
 	GPIO_SPEED_HIGH 	= 3U,	/* Set output speed as High */
+	GPIO_SPEED_DEFAULT 	= 0U	/* Output speed default is Low */
 };
 
 /*
@@ -65,7 +67,7 @@ enum GPIO_PUPD
 {
 	GPIO_NO_PUPD 		= 0U,	/* Set pin no pull-up, pull-down */
 	GPIO_PIN_PU 		= 1U,	/* Set pin pull-up */
-	GPIO_PIN_PD 		= 2U,	/* Set pin pull-down */
+	GPIO_PIN_PD 		= 2U	/* Set pin pull-down */
 };
 
 /*
@@ -73,8 +75,9 @@ enum GPIO_PUPD
  */
 enum GPIO_OP_TYPE
 {
-	GPIO_OP_TYPE_PP 	= 0U,	/* Set output type as Push-pull */
-	GPIO_OP_TYPE_OD 	= 1U,	/* Set output type as Open drain */
+	GPIO_OP_TYPE_PP 		= 0U,	/* Set output type as Push-pull */
+	GPIO_OP_TYPE_OD 		= 1U,	/* Set output type as Open drain */
+	GPIO_OP_TYPE_DEFAULT 	= 0U	/* Output type default is Push-pull */
 };
 
 /*
@@ -82,7 +85,7 @@ enum GPIO_OP_TYPE
  */
 enum GPIO_ALT_FN
 {
-	GPIO_ALT_FN_AF0	 	= 0U,
+	GPIO_ALT_FN_AF0	 		= 0U,
 	GPIO_ALT_FN_AF1 		= 1U,
 	GPIO_ALT_FN_AF2 		= 2U,
 	GPIO_ALT_FN_AF3 		= 3U,
@@ -97,7 +100,8 @@ enum GPIO_ALT_FN
 	GPIO_ALT_FN_AF12 		= 12U,
 	GPIO_ALT_FN_AF13 		= 13U,
 	GPIO_ALT_FN_AF14 		= 14U,
-	GPIO_ALT_FN_AF15		= 15U
+	GPIO_ALT_FN_AF15		= 15U,
+	GPIO_ALT_FN_DEFAULT		= 0U
 };
 
 /*

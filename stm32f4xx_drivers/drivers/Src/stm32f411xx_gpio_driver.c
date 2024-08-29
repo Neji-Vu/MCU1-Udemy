@@ -370,7 +370,7 @@ void GPIO_IRQInterruptConfig(enum IRQ_NO IRQNumber, uint8_t EnorDi)
  * @Note              -
 
  */
-void GPIO_IRQPriorityConfig(enum IRQ_NO IRQNumber,uint8_t IRQPriority)
+void GPIO_IRQPriorityConfig(enum IRQ_NO IRQNumber, uint8_t IRQPriority)
 {
 	// Identify the register position needed to configure
 	uint8_t reg_pos = IRQNumber / 4;
@@ -400,10 +400,10 @@ void GPIO_IRQPriorityConfig(enum IRQ_NO IRQNumber,uint8_t IRQPriority)
  */
 void GPIO_IRQHandling(uint8_t PinNumber)
 {
-	//clear the exti pr register corresponding to the pin number
+	// Clear the exti pr register corresponding to the pin number
 	if(EXTI->PR & ( 1 << PinNumber))
 	{
-		//clear
+		// Clear bit by setting it to 1
 		EXTI->PR |= ( 1 << PinNumber);
 	}
 

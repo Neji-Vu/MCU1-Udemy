@@ -64,6 +64,7 @@ int main(void)
 		}
 	}
 #endif
+	//BUTTON
 	GPIO_PinConfig_t pin_PB12 = {
 			GPIO_PIN_NO_12,
 			GPIO_MODE_IN,
@@ -78,6 +79,8 @@ int main(void)
 	GPIO_PeriClockControl(GPIOB, ENABLE);
 	GPIO_Init(&GPIO_B_Handle);
 
+
+	//LED
 	GPIO_PinConfig_t pin_PA5 = {
 			GPIO_PIN_NO_5,
 			GPIO_MODE_OUT,
@@ -109,9 +112,11 @@ int main(void)
 	for(;;){
 		if(GPIO_ReadFromInputPin(GPIOB, GPIO_B_Handle.GPIO_PinConfig.GPIO_PinNumber)){
 			GPIO_WriteToOutputPin(GPIOA, GPIO_A_Handle.GPIO_PinConfig.GPIO_PinNumber, SET);
+//			GPIO_WriteToOutputPin(GPIOD, GPIO_D_Handle.GPIO_PinConfig.GPIO_PinNumber, SET);
 		}
 		{
 			GPIO_WriteToOutputPin(GPIOA, GPIO_A_Handle.GPIO_PinConfig.GPIO_PinNumber, RESET);
+			GPIO_WriteToOutputPin(GPIOD, GPIO_D_Handle.GPIO_PinConfig.GPIO_PinNumber, RESET);
 		}
 	}
 }
