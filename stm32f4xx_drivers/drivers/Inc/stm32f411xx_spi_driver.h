@@ -11,17 +11,89 @@
 #include "stm32f411xx.h"
 
 /*
+ * Device mode selection
+ */
+enum SPI_DEVICE_MODE
+{
+	SPI_DEVICE_MODE_MASTER		= 0U,	/* MCU is the master */
+	SPI_DEVICE_MODE_SLAVE		= 1U	/* MCU is the slave */
+};
+
+/*
+ * Select full duplex, haft duplex or simple communications
+ */
+enum SPI_BUS_CONFIG
+{
+	SPI_BUS_CONFIG_FD				= 1U,	/* Full-duplex communication */
+	SPI_BUS_CONFIG_HD				= 2U,	/* Haft-duplex communication */
+	SPI_BUS_CONFIG_SIMPLE_RXONLY	= 3U	/* Simple communication */
+};
+
+/*
+ * Select Baud rate control (Configure the serial clock in SCLK pin)
+ * The serial clock is equal to (SPI_clock / Prescaler)
+ * SPI_clock depends on the clock in bus interface hung on
+ * Configure the Prescaler number
+ */
+enum SPI_SCLK_SPEED
+{
+	SPI_SCLK_SPEED_DIV2				= 0U,
+	SPI_SCLK_SPEED_DIV4				= 1U,
+	SPI_SCLK_SPEED_DIV8				= 2U,
+	SPI_SCLK_SPEED_DIV16			= 3U,
+	SPI_SCLK_SPEED_DIV32			= 4U,
+	SPI_SCLK_SPEED_DIV64			= 5U,
+	SPI_SCLK_SPEED_DIV128			= 6U,
+	SPI_SCLK_SPEED_DIV256			= 7U
+};
+
+/*
+ * Configure the data frame format
+ */
+enum SPI_DFF
+{
+	SPI_DFF_8BITS		= 0U,	/* 8-bit data frame format is selected for transmission/reception */
+	SPI_DFF_16BITS		= 1U	/* 16-bit data frame format is selected for transmission/reception */
+};
+
+/*
+ * Configure the clock polarity
+ */
+enum SPI_CPOL
+{
+	SPI_CPOL_LOW		= 0U,
+	SPI_CPOL_HIGH		= 1U
+};
+
+/*
+ * Configure the clock phase
+ */
+enum SPI_CPHA
+{
+	SPI_CPHA_LOW		= 0U,	/* The first clock transition is the first data capture edge */
+	SPI_CPHA_HIGH		= 1U	/* The second clock transition is the first data capture edge */
+};
+
+/*
+ * Software slave management
+ */
+enum SPI_SSM
+{
+	SPI_SSM_DI			= 0U,	/* Software slave management disabled */
+	SPI_SSM_EN			= 1U	/* Software slave management enabled */
+};
+/*
  *  Configuration structure for SPIx peripheral
  */
 typedef struct
 {
-	uint8_t SPI_DeviceMode;
-	uint8_t SPI_BusConfig;
-	uint8_t SPI_SclkSpeed;
-	uint8_t SPI_DFF;
-	uint8_t SPI_CPOL;
-	uint8_t SPI_CPHA;
-	uint8_t SPI_SSM;
+	enum SPI_DEVICE_MODE 	SPI_DeviceMode;
+	enum SPI_BUS_CONFIG 	SPI_BusConfig;
+	enum SPI_SCLK_SPEED 	SPI_SclkSpeed;
+	enum SPI_DFF 			SPI_DFF;
+	enum SPI_CPOL 			SPI_CPOL;
+	enum SPI_CPHA 			SPI_CPHA;
+	enum SPI_SSM 			SPI_SSM;
 }SPI_Config_t;
 
 /*
