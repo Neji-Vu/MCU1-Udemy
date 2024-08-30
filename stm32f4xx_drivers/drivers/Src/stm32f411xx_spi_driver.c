@@ -83,14 +83,17 @@ void SPI_PeriClockControl(SPI_RegDef_t *pSPIx, uint8_t EnorDi)
  */
 void SPI_Init(SPI_Handle_t *pSPIHandle)
 {
+	// Peripheral clock enable
+	SPI_PeriClockControl(pSPIHandle->pSPI, ENABLE);
+
 	// Temporary register variable
 	uint32_t tempReg = 0x00000000U;
 
 	// 1. Configure the device mode
-	tempReg |= pSPIHandle->SPI_PinConfig.SPI_DeviceMode << SPI_CR1_BIT_MSTR;
+	tempReg |= pSPIHandle->SPI_Config.SPI_DeviceMode << SPI_CR1_BIT_MSTR;
 
 	// 2. Configure the bus configuration
-	if(pSPIHandle->SPI_PinConfig.SPI_BusConfig == SPI_BUS_CONFIG_FD){
+	if(pSPIHandle->SPI_Config.SPI_BusConfig == SPI_BUS_CONFIG_FD){
 		// Configure bus in full duplex communication
 		// BIDIMODE bit needs to be set to 0
 		tempReg &= ~(1 << SPI_CR1_BIT_BIDIMODE);
@@ -98,12 +101,12 @@ void SPI_Init(SPI_Handle_t *pSPIHandle)
 		tempReg &= ~(1 << SPI_CR1_BIT_RXONLY);
 
 	}
-	else if(pSPIHandle->SPI_PinConfig.SPI_BusConfig == SPI_BUS_CONFIG_HD){
+	else if(pSPIHandle->SPI_Config.SPI_BusConfig == SPI_BUS_CONFIG_HD){
 		// Configure bus in half duplex communication
 		// BIDIMODE bit needs to be set to 1
 		tempReg |= 1 << SPI_CR1_BIT_BIDIMODE;
 	}
-	else if(pSPIHandle->SPI_PinConfig.SPI_BusConfig == SPI_BUS_CONFIG_SIMPLE_RXONLY){
+	else if(pSPIHandle->SPI_Config.SPI_BusConfig == SPI_BUS_CONFIG_SIMPLE_RXONLY){
 		// Configure bus in simple communication
 		// BIDIMODE bit needs to be set to 0
 		tempReg &= ~(1 << SPI_CR1_BIT_BIDIMODE);
@@ -115,19 +118,19 @@ void SPI_Init(SPI_Handle_t *pSPIHandle)
 	}
 
 	// 3. Configure the clock speed (Prescaler number)
-	tempReg |= (pSPIHandle->SPI_PinConfig.SPI_SclkSpeed << SPI_CR1_BIT_BR);
+	tempReg |= (pSPIHandle->SPI_Config.SPI_SclkSpeed << SPI_CR1_BIT_BR);
 
 	// 4. Configure the data frame format
-	tempReg |= (pSPIHandle->SPI_PinConfig.SPI_DFF << SPI_CR1_BIT_DFF);
+	tempReg |= (pSPIHandle->SPI_Config.SPI_DFF << SPI_CR1_BIT_DFF);
 
 	// 5. Configure the clock polarity
-	tempReg |= (pSPIHandle->SPI_PinConfig.SPI_CPOL << SPI_CR1_BIT_CPOL);
+	tempReg |= (pSPIHandle->SPI_Config.SPI_CPOL << SPI_CR1_BIT_CPOL);
 
 	// 6. Configure the clock phase
-	tempReg |= (pSPIHandle->SPI_PinConfig.SPI_CPHA << SPI_CR1_BIT_CPHA);
+	tempReg |= (pSPIHandle->SPI_Config.SPI_CPHA << SPI_CR1_BIT_CPHA);
 
 	// 7. Configure the software slave management
-	tempReg |= (pSPIHandle->SPI_PinConfig.SPI_SSM << SPI_CR1_BIT_SSM);
+	tempReg |= (pSPIHandle->SPI_Config.SPI_SSM << SPI_CR1_BIT_SSM);
 
 
 	// Set temporary value to SPI_CR1 register

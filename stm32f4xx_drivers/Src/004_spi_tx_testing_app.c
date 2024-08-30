@@ -16,7 +16,7 @@
  ******************************************************************************
  */
 
-#include <stdint.h>
+#include <string.h>
 #include <stdio.h>
 
 #include "stm32f411xx.h"
@@ -25,9 +25,74 @@
   #warning "FPU is not initialized, but the project is compiling for an FPU. Please initialize the FPU before use."
 #endif
 
+void SPI2_GPIOInits(void)
+{
+	/*
+	 * SPI2 Pin selections:
+	 * PB15 -> SPI2_MOSI
+	 * PB14 -> SPI2_MISO
+	 * PB10 -> SPI2_SCK
+	 * PB9  -> SPI2_NSS
+	 * Alternate function mode: AF5
+	 */
+
+	GPIO_Handle_t SPIPins;
+
+	SPIPins.pGPIO = GPIOB;
+	SPIPins.GPIO_PinConfig.GPIO_PinMode = GPIO_MODE_ALTFN;
+	SPIPins.GPIO_PinConfig.GPIO_PinAltFunMode = 5;
+	SPIPins.GPIO_PinConfig.GPIO_PinOPType = GPIO_OP_TYPE_PP;
+	SPIPins.GPIO_PinConfig.GPIO_PinPuPdControl = GPIO_NO_PUPD;
+	SPIPins.GPIO_PinConfig.GPIO_PinSpeed = GPIO_SPEED_FAST;
+
+	// MOSI
+	SPIPins.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_NO_15;
+	GPIO_Init(&SPIPins);
+
+//	// MISO
+//	SPIPins.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_NO_14;
+//	GPIO_Init(&SPIPins);
+
+	// SCK
+	SPIPins.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_NO_10;
+	GPIO_Init(&SPIPins);
+
+//	// NSS
+//	SPIPins.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_NO_9;
+//	GPIO_Init(&SPIPins);
+
+}
+
+void SPI2_Inits(void)
+{
+
+	SPI_Handle_t SPI2handle;
+
+	SPI2handle.pSPI = SPI2;
+	SPI2handle.SPI_Config.SPI_BusConfig = SPI_BUS_CONFIG_FD;
+	SPI2handle.SPI_Config.SPI_DeviceMode = SPI_DEVICE_MODE_MASTER;
+	SPI2handle.SPI_Config.SPI_SclkSpeed = SPI_SCLK_SPEED_DIV2;//generates sclk of 8MHz
+	SPI2handle.SPI_Config.SPI_DFF = SPI_DFF_8BITS;
+	SPI2handle.SPI_Config.SPI_CPOL = SPI_CPOL_HIGH;
+	SPI2handle.SPI_Config.SPI_CPHA = SPI_CPHA_LOW;
+	SPI2handle.SPI_Config.SPI_SSM = SPI_SSM_EN; //software slave management enabled for NSS pin
+
+	SPI_Init(&SPI2handle);
+}
+
 int main(void)
 {
 
+	char user_data[] = "Hello world";
+
+	// SPI GPIO Init
+	SPI2_GPIOInits();
+
+	//This function is used to initialize the SPI2 peripheral parameters
+	SPI2_Inits();
+
+	//to send data
+	SPI_SendData(SPI2,(uint8_t*)user_data,strlen(user_data));
 
     /* Loop forever */
 	for(;;){

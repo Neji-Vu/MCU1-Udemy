@@ -89,6 +89,9 @@ void GPIO_PeriClockControl(GPIO_RegDef_t *pGPIOx, uint8_t EnorDi)
  */
 void GPIO_Init(GPIO_Handle_t *pGPIOHandle)
 {
+	// Peripheral clock enable
+	GPIO_PeriClockControl(pGPIOHandle->pGPIO, ENABLE);
+
 	// 1. Configure the mode of gpio pin
 	// First check it is interrupt mode or not
 	if(pGPIOHandle->GPIO_PinConfig.GPIO_PinMode <= GPIO_MODE_ANALOG){

@@ -102,7 +102,7 @@ typedef struct
 typedef struct
 {
 	SPI_RegDef_t 		*pSPI; /* Holds the base address of the SPI communication to which the pin belongs */
-	SPI_Config_t 	SPI_PinConfig; /* Holds the SPI communication's configuration settings */
+	SPI_Config_t 	SPI_Config; /* Holds the SPI communication's configuration settings */
 }SPI_Handle_t;
 
 /*
