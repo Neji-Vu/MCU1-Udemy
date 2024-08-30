@@ -344,16 +344,35 @@ typedef struct
 #define RESET 					DISABLE
 #define GPIO_PIN_SET			SET
 #define GPIO_PIN_RESET			RESET
+#define FLAG_SET				SET
+#define FLAG_RESET				RESET
 
 enum IRQ_NO{
-	IRQ_NO_EXTI0			= 6U,
-	IRQ_NO_EXTI1			= 7U,
-	IRQ_NO_EXTI2			= 8U,
-	IRQ_NO_EXTI3			= 9U,
-	IRQ_NO_EXTI4			= 10U,
-	IRQ_NO_EXTI5_9			= 23U,
-	IRQ_NO_EXTI10_15		= 40U
+	IRQ_NO_EXTI0				= 6U,
+	IRQ_NO_EXTI1				= 7U,
+	IRQ_NO_EXTI2				= 8U,
+	IRQ_NO_EXTI3				= 9U,
+	IRQ_NO_EXTI4				= 10U,
+	IRQ_NO_EXTI5_9				= 23U,
+	IRQ_NO_EXTI10_15			= 40U
 };
+
+/*
+ * Bit fields of SPI CR1 register
+ */
+#define SPI_CR1_BIT_CPHA		0U
+#define SPI_CR1_BIT_CPOL		1U
+#define SPI_CR1_BIT_MSTR		2U
+#define SPI_CR1_BIT_BR			3U
+#define SPI_CR1_BIT_SSM			9U
+#define SPI_CR1_BIT_RXONLY		10U
+#define SPI_CR1_BIT_DFF			11U
+#define SPI_CR1_BIT_BIDIMODE	15U
+
+/*
+ * Bit fields of SPI SR register
+ */
+#define SPI_SR_BIT_TXE			1U
 
 #include "stm32f411xx_gpio_driver.h"
 #include "stm32f411xx_spi_driver.h"

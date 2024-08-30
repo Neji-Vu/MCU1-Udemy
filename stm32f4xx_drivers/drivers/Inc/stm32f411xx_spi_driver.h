@@ -20,12 +20,12 @@ enum SPI_DEVICE_MODE
 };
 
 /*
- * Select full duplex, haft duplex or simple communications
+ * Select full duplex, half duplex or simple communications
  */
 enum SPI_BUS_CONFIG
 {
 	SPI_BUS_CONFIG_FD				= 1U,	/* Full-duplex communication */
-	SPI_BUS_CONFIG_HD				= 2U,	/* Haft-duplex communication */
+	SPI_BUS_CONFIG_HD				= 2U,	/* Half-duplex communication */
 	SPI_BUS_CONFIG_SIMPLE_RXONLY	= 3U	/* Simple communication */
 };
 
@@ -105,6 +105,17 @@ typedef struct
 	SPI_Config_t 	SPI_PinConfig; /* Holds the SPI communication's configuration settings */
 }SPI_Handle_t;
 
+/*
+ * Generic macros
+ */
+#define SPI_TX_BUFFER_NOT_EMPTY		0U
+#define SPI_TX_BUFFER_EMPTY			1U
+
+/*
+ * SPI related status flag definitions
+ */
+#define SPI_TXE_FLAG				(1 << SPI_SR_BIT_TXE)
+
 /******************************************************************************************
  *								APIs supported by this driver
  *		 For more information about the APIs check the function definitions
@@ -135,5 +146,16 @@ uint8_t SPI_ReceiveDataIT(SPI_Handle_t *pSPIHandle, uint8_t *pRxBuffer, uint32_t
 void SPI_IRQInterruptConfig(uint8_t IRQNumber, uint8_t EnorDi);
 void SPI_IRQPriorityConfig(uint8_t IRQNumber, uint32_t IRQPriority);
 void SPI_IRQHandling(SPI_Handle_t *pHandle);
+
+/*
+ * Other Peripheral Control APIs
+ */
+void SPI_PeripheralControl(SPI_RegDef_t *pSPIx, uint8_t EnOrDi);
+void SPI_SSIConfig(SPI_RegDef_t *pSPIx, uint8_t EnOrDi);
+void SPI_SSOEConfig(SPI_RegDef_t *pSPIx, uint8_t EnOrDi);
+uint8_t SPI_GetFlagStatus(SPI_RegDef_t *pSPIx , uint32_t FlagName);
+void SPI_ClearOVRFlag(SPI_RegDef_t *pSPIx);
+void SPI_CloseTransmisson(SPI_Handle_t *pSPIHandle);
+void SPI_CloseReception(SPI_Handle_t *pSPIHandle);
 
 #endif /* INC_STM32F411XX_SPI_DRIVER_H_ */
