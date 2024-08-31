@@ -364,6 +364,7 @@ enum IRQ_NO{
 #define SPI_CR1_BIT_CPOL		1U
 #define SPI_CR1_BIT_MSTR		2U
 #define SPI_CR1_BIT_BR			3U
+#define SPI_CR1_BIT_SPE			6U
 #define SPI_CR1_BIT_SSM			9U
 #define SPI_CR1_BIT_RXONLY		10U
 #define SPI_CR1_BIT_DFF			11U

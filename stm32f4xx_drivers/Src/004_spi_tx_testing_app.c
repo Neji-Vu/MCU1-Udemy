@@ -39,11 +39,11 @@ void SPI2_GPIOInits(void)
 	GPIO_Handle_t SPIPins;
 
 	SPIPins.pGPIO = GPIOB;
-	SPIPins.GPIO_PinConfig.GPIO_PinMode = GPIO_MODE_ALTFN;
-	SPIPins.GPIO_PinConfig.GPIO_PinAltFunMode = 5;
-	SPIPins.GPIO_PinConfig.GPIO_PinOPType = GPIO_OP_TYPE_PP;
-	SPIPins.GPIO_PinConfig.GPIO_PinPuPdControl = GPIO_NO_PUPD;
-	SPIPins.GPIO_PinConfig.GPIO_PinSpeed = GPIO_SPEED_FAST;
+	SPIPins.GPIO_PinConfig.GPIO_PinMode 		= GPIO_MODE_ALTFN;
+	SPIPins.GPIO_PinConfig.GPIO_PinAltFunMode 	= 5;
+	SPIPins.GPIO_PinConfig.GPIO_PinOPType 		= GPIO_OP_TYPE_PP;
+	SPIPins.GPIO_PinConfig.GPIO_PinPuPdControl 	= GPIO_NO_PUPD;
+	SPIPins.GPIO_PinConfig.GPIO_PinSpeed 		= GPIO_SPEED_FAST;
 
 	// MOSI
 	SPIPins.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_NO_15;
@@ -69,13 +69,13 @@ void SPI2_Inits(void)
 	SPI_Handle_t SPI2handle;
 
 	SPI2handle.pSPI = SPI2;
-	SPI2handle.SPI_Config.SPI_BusConfig = SPI_BUS_CONFIG_FD;
-	SPI2handle.SPI_Config.SPI_DeviceMode = SPI_DEVICE_MODE_MASTER;
-	SPI2handle.SPI_Config.SPI_SclkSpeed = SPI_SCLK_SPEED_DIV2;//generates sclk of 8MHz
-	SPI2handle.SPI_Config.SPI_DFF = SPI_DFF_8BITS;
-	SPI2handle.SPI_Config.SPI_CPOL = SPI_CPOL_HIGH;
-	SPI2handle.SPI_Config.SPI_CPHA = SPI_CPHA_LOW;
-	SPI2handle.SPI_Config.SPI_SSM = SPI_SSM_EN; //software slave management enabled for NSS pin
+	SPI2handle.SPI_Config.SPI_BusConfig 	= SPI_BUS_CONFIG_FD;
+	SPI2handle.SPI_Config.SPI_DeviceMode 	= SPI_DEVICE_MODE_MASTER;
+	SPI2handle.SPI_Config.SPI_SclkSpeed 	= SPI_SCLK_SPEED_DIV2;//generates sclk of 8MHz
+	SPI2handle.SPI_Config.SPI_DFF 			= SPI_DFF_8BITS;
+	SPI2handle.SPI_Config.SPI_CPOL 			= SPI_CPOL_LOW;
+	SPI2handle.SPI_Config.SPI_CPHA 			= SPI_CPHA_LOW;
+	SPI2handle.SPI_Config.SPI_SSM 			= SPI_SSM_EN; //software slave management enabled for NSS pin
 
 	SPI_Init(&SPI2handle);
 }
@@ -91,8 +91,11 @@ int main(void)
 	//This function is used to initialize the SPI2 peripheral parameters
 	SPI2_Inits();
 
+	//enable the SPI2 peripheral
+	SPI_PeripheralControl(SPI2, ENABLE);
+
 	//to send data
-	SPI_SendData(SPI2,(uint8_t*)user_data,strlen(user_data));
+	SPI_SendData(SPI2, (uint8_t*)user_data, strlen(user_data));
 
     /* Loop forever */
 	for(;;){

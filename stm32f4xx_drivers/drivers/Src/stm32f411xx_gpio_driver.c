@@ -164,7 +164,7 @@ void GPIO_Init(GPIO_Handle_t *pGPIOHandle)
 		uint8_t reg_pos = pGPIOHandle->GPIO_PinConfig.GPIO_PinNumber / 8;
 		uint8_t reg_section = pGPIOHandle->GPIO_PinConfig.GPIO_PinNumber % 8;
 		pGPIOHandle->pGPIO->AFR[reg_pos] &= ~(0xF << (reg_section * 4));
-		pGPIOHandle->pGPIO->AFR[reg_pos] = (pGPIOHandle->GPIO_PinConfig.GPIO_PinAltFunMode << (reg_section * 4));
+		pGPIOHandle->pGPIO->AFR[reg_pos] |= (pGPIOHandle->GPIO_PinConfig.GPIO_PinAltFunMode << (reg_section * 4));
 	}
 
 }

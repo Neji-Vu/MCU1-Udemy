@@ -181,6 +181,32 @@ uint8_t SPI_GetFlagStatus(SPI_RegDef_t *pSPIx , uint32_t FlagName)
 }
 
 /*********************************************************************
+ * @fn      		  - SPI_PeripheralControl
+ *
+ * @brief             -
+ *
+ * @param[in]         -
+ * @param[in]         -
+ * @param[in]         -
+ *
+ * @return            -
+ *
+ * @Note              -
+
+ */
+void SPI_PeripheralControl(SPI_RegDef_t *pSPIx, uint8_t EnOrDi)
+{
+	if(EnOrDi){
+		// Enable SPI
+		pSPIx->CR1 |= (1 << SPI_CR1_BIT_SPE);
+	}
+	else{
+		// Disable SPI
+		pSPIx->CR1 &= ~(1 << SPI_CR1_BIT_SPE);
+	}
+}
+
+/*********************************************************************
  * @fn      		  - SPI_SendData
  *
  * @brief             -

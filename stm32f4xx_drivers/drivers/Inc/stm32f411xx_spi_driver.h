@@ -15,8 +15,8 @@
  */
 enum SPI_DEVICE_MODE
 {
-	SPI_DEVICE_MODE_MASTER		= 0U,	/* MCU is the master */
-	SPI_DEVICE_MODE_SLAVE		= 1U	/* MCU is the slave */
+	SPI_DEVICE_MODE_SLAVE		= 0U,	/* MCU is the slave */
+	SPI_DEVICE_MODE_MASTER		= 1U,	/* MCU is the master */
 };
 
 /*
