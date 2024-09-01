@@ -103,7 +103,7 @@ void GPIO_ButtonInit(void)
 int main(void)
 {
 
-	char user_data[] = "An Arduino Uno board is best suited for beginners who have just started using microcontrollers";
+	char user_data[] = "Hello world!";
 
 	GPIO_ButtonInit();
 
@@ -138,20 +138,6 @@ int main(void)
 
 		// Send data
 		SPI_SendData(SPI2, (uint8_t*)user_data, strlen(user_data));
-
-		//	// Confirm SPI is not busy
-		//	while( SPI_GetFlagStatus(SPI2, SPI_BSY_FLAG) );
-		//
-		//	// Disable the SPI2 peripheral
-		//	SPI_PeripheralControl(SPI2, DISABLE);
-
-//		char user_data1[] = "Test";
-
-		//	// Enable the SPI2 peripheral
-		//	SPI_PeripheralControl(SPI2, ENABLE);
-
-//		// Send data
-//		SPI_SendData(SPI2, (uint8_t*)user_data1, strlen(user_data1));
 
 		// Confirm SPI is not busy
 		while( SPI_GetFlagStatus(SPI2, SPI_BSY_FLAG) );

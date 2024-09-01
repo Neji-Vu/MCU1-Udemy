@@ -25,6 +25,27 @@
   #warning "FPU is not initialized, but the project is compiling for an FPU. Please initialize the FPU before use."
 #endif
 
+// Command codes
+#define COMMAND_LED_CTRL      		0x50
+#define COMMAND_SENSOR_READ      	0x51
+#define COMMAND_LED_READ      		0x52
+#define COMMAND_PRINT      			0x53
+#define COMMAND_ID_READ      		0x54
+
+#define LED_ON     1
+#define LED_OFF    0
+
+// Arduino analog pins
+#define ANALOG_PIN0 	0
+#define ANALOG_PIN1 	1
+#define ANALOG_PIN2 	2
+#define ANALOG_PIN3 	3
+#define ANALOG_PIN4 	4
+
+// Arduino led
+
+#define LED_PIN  9
+
 void delay(void)
 {
 	for(uint32_t i = 0 ; i < 500000 ; i ++);
@@ -54,9 +75,9 @@ void SPI2_GPIOInits(void)
 	SPIPins.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_NO_15;
 	GPIO_Init(&SPIPins);
 
-//	// MISO
-//	SPIPins.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_NO_14;
-//	GPIO_Init(&SPIPins);
+	// MISO
+	SPIPins.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_NO_14;
+	GPIO_Init(&SPIPins);
 
 	// SCK
 	SPIPins.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_NO_10;
@@ -100,11 +121,24 @@ void GPIO_ButtonInit(void)
 
 }
 
+uint8_t SPI_VerifyResponse(uint8_t ackbyte)
+{
+
+	if(ackbyte == (uint8_t)0xF5)
+	{
+		//ack
+		return 1;
+	}
+	return 0;
+}
+
 int main(void)
 {
 
-	char user_data[] = "An Arduino Uno board is best suited for beginners who have just started using microcontrollers";
+	uint8_t dummy_write = 0xff;
+	uint8_t dummy_read;
 
+	// Init button to enable SPI communication
 	GPIO_ButtonInit();
 
 	// Initialize the GPIO pins to behave as SPI2 pins
@@ -132,12 +166,80 @@ int main(void)
 		// Enable the SPI2 peripheral
 		SPI_PeripheralControl(SPI2, ENABLE);
 
-		// Send length information first
-		uint8_t dataLen = strlen(user_data);
-		SPI_SendData(SPI2, &dataLen, 1);
+	    // 1. CMD_LED_CTRL  	<pin no(1)>     <value(1)>
 
-		// Send data
-		SPI_SendData(SPI2, (uint8_t*)user_data, strlen(user_data));
+		uint8_t commandcode = COMMAND_LED_CTRL;
+		uint8_t ackbyte;
+		uint8_t args[2];
+
+		// Send LED CTRL command
+		SPI_SendData(SPI2, &commandcode, 1);
+
+		// Do dummy read to clear off the RXNE
+		SPI_ReceiveData(SPI2, &dummy_read, 1);
+
+		// Send some dummy bits (1 byte) fetch the response from the slave
+		SPI_SendData(SPI2, &dummy_write, 1);
+
+		// Read the ack byte received
+		SPI_ReceiveData(SPI2, &ackbyte, 1);
+
+		if( SPI_VerifyResponse(ackbyte))
+		{
+			args[0] = LED_PIN;
+			args[1] = LED_ON;
+
+			// Send arguments
+			SPI_SendData(SPI2,args,1);
+			// dummy read
+			SPI_ReceiveData(SPI2,&dummy_read,1);
+			// Send arguments
+			SPI_SendData(SPI2,args+1,1);
+			// dummy read
+			SPI_ReceiveData(SPI2,&dummy_read,1);
+		}
+
+		//2. CMD_SENOSR_READ   <analog pin number(1) >
+		//wait till button is pressed
+		while( ! GPIO_ReadFromInputPin(GPIOA,GPIO_PIN_NO_0) );
+
+		//to avoid button de-bouncing related issues 200ms of delay
+		delay();
+
+		commandcode = COMMAND_SENSOR_READ;
+
+		//send command
+		SPI_SendData(SPI2,&commandcode,1);
+
+		//do dummy read to clear off the RXNE
+		SPI_ReceiveData(SPI2,&dummy_read,1);
+
+
+		//Send some dummy byte to fetch the response from the slave
+		SPI_SendData(SPI2,&dummy_write,1);
+
+		//read the ack byte received
+		SPI_ReceiveData(SPI2,&ackbyte,1);
+
+		if( SPI_VerifyResponse(ackbyte))
+		{
+			args[0] = ANALOG_PIN0;
+
+			//send arguments
+			SPI_SendData(SPI2,args,1); //sending one byte of
+
+			//do dummy read to clear off the RXNE
+			SPI_ReceiveData(SPI2,&dummy_read,1);
+
+			//insert some delay so that slave can ready with the data
+			delay();
+
+			//Send some dummy bits (1 byte) fetch the response from the slave
+			SPI_SendData(SPI2,&dummy_write,1);
+
+			uint8_t analog_read;
+			SPI_ReceiveData(SPI2,&analog_read,1);
+		}
 
 		// Confirm SPI is not busy
 		while( SPI_GetFlagStatus(SPI2, SPI_BSY_FLAG) );
