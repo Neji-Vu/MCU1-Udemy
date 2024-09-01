@@ -282,9 +282,7 @@ void SPI_SendData(SPI_RegDef_t *pSPIx,uint8_t *pTxBuffer, uint32_t Len)
 		while(SPI_GetFlagStatus(pSPIx, SPI_TXE_FLAG) == SPI_TX_BUFFER_NOT_EMPTY);
 
 		// Check the data frame format of SPI is 8-bit or 16-bit
-		// 0: data frame format is 8 bits
-		// 1: data frame format is 16 bits
-		if((pSPIx->CR1 & (1 << SPI_CR1_BIT_DFF)) == 0U){
+		if((pSPIx->CR1 & (1 << SPI_CR1_BIT_DFF)) == SPI_DFF_8BITS){
 			// Load 8-bit data to the data register and increment the buffer address
 			pSPIx->DR = *pTxBuffer;
 			// Increment the buffer address
@@ -296,11 +294,52 @@ void SPI_SendData(SPI_RegDef_t *pSPIx,uint8_t *pTxBuffer, uint32_t Len)
 		else{
 			// todo: need to check for odd bytes => fault
 			// Load 16-bit data to the data register
-			pSPIx->DR = *(pTxBuffer + 1) | ((*pTxBuffer) << 8);
+			pSPIx->DR = *((uint16_t*)pTxBuffer);
 			// Increment the buffer address
-			pTxBuffer += 2;
+			pTxBuffer += 2U;
 
 			// Decrement the length two times (2 bytes are sent)
+			Len -= 2U;
+		}
+	}
+}
+
+/*********************************************************************
+ * @fn      		  - SPI_ReceiveData
+ *
+ * @brief             -
+ *
+ * @param[in]         -
+ * @param[in]         -
+ * @param[in]         -
+ *
+ * @return            -
+ *
+ * @Note              -
+
+ */
+void SPI_ReceiveData(SPI_RegDef_t *pSPIx, uint8_t *pRxBuffer, uint32_t Len)
+{
+	// Check the length of data is greater than 0U or not
+	while(Len > 0U){
+		// Wait until the RX buffer is not empty
+		while(SPI_GetFlagStatus(pSPIx, SPI_RXNE_FLAG) == SPI_RX_BUFFER_EMPTY);
+
+		// Check the data frame format is 8-bit of 16-bit
+		if((pSPIx->CR1 & (1 << SPI_CR1_BIT_DFF)) == SPI_DFF_8BITS){
+			// Read 1 byte data from DR to RxBuffer
+			*pRxBuffer = pSPIx->DR;
+			// Increment Rx buffer
+			pRxBuffer++;
+			// Decrease the length
+			Len--;
+		}
+		else{
+			// Read 2 bytes data from DR to RxBuffer
+			*((uint16_t*)pRxBuffer) = pSPIx->DR;
+			// Increment Rx buffer
+			pRxBuffer += 2U;
+			// Decrease the length
 			Len -= 2U;
 		}
 	}

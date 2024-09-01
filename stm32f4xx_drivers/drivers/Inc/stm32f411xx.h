@@ -379,6 +379,7 @@ enum IRQ_NO{
 /*
  * Bit fields of SPI SR register
  */
+#define SPI_SR_BIT_RXNE			0U
 #define SPI_SR_BIT_TXE			1U
 #define SPI_SR_BIT_BSY			7U
 

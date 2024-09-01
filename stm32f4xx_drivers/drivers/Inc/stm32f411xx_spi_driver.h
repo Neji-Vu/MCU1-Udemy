@@ -110,12 +110,15 @@ typedef struct
  */
 #define SPI_TX_BUFFER_NOT_EMPTY		0U
 #define SPI_TX_BUFFER_EMPTY			1U
+#define SPI_RX_BUFFER_NOT_EMPTY		1U
+#define SPI_RX_BUFFER_EMPTY			0U
 
 /*
  * SPI related status flag definitions
  */
 #define SPI_TXE_FLAG				(1 << SPI_SR_BIT_TXE)
 #define SPI_BSY_FLAG				(1 << SPI_SR_BIT_BSY)
+#define SPI_RXNE_FLAG				(1 << SPI_SR_BIT_RXNE)
 
 /******************************************************************************************
  *								APIs supported by this driver
