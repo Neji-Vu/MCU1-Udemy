@@ -365,15 +365,22 @@ enum IRQ_NO{
 #define SPI_CR1_BIT_MSTR		2U
 #define SPI_CR1_BIT_BR			3U
 #define SPI_CR1_BIT_SPE			6U
+#define SPI_CR1_BIT_SSI			8U
 #define SPI_CR1_BIT_SSM			9U
 #define SPI_CR1_BIT_RXONLY		10U
 #define SPI_CR1_BIT_DFF			11U
 #define SPI_CR1_BIT_BIDIMODE	15U
 
 /*
+ * Bit fields of SPI CR2 register
+ */
+#define SPI_CR2_BIT_SSOE		2U
+
+/*
  * Bit fields of SPI SR register
  */
 #define SPI_SR_BIT_TXE			1U
+#define SPI_SR_BIT_BSY			7U
 
 #include "stm32f411xx_gpio_driver.h"
 #include "stm32f411xx_spi_driver.h"
