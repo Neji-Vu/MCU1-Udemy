@@ -354,7 +354,12 @@ enum IRQ_NO{
 	IRQ_NO_EXTI3				= 9U,
 	IRQ_NO_EXTI4				= 10U,
 	IRQ_NO_EXTI5_9				= 23U,
-	IRQ_NO_EXTI10_15			= 40U
+	IRQ_NO_SPI1					= 35U,
+	IRQ_NO_SPI2					= 36U,
+	IRQ_NO_EXTI10_15			= 40U,
+	IRQ_NO_SPI3					= 51U,
+	IRQ_NO_SPI4					= 84U,
+	IRQ_NO_SPI5					= 85U
 };
 
 /*
@@ -375,6 +380,8 @@ enum IRQ_NO{
  * Bit fields of SPI CR2 register
  */
 #define SPI_CR2_BIT_SSOE		2U
+#define SPI_CR2_BIT_RXNEIE		6U
+#define SPI_CR2_BIT_TXEIE		7U
 
 /*
  * Bit fields of SPI SR register

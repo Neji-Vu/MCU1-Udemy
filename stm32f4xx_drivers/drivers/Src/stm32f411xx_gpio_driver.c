@@ -337,7 +337,7 @@ void GPIO_IRQInterruptConfig(enum IRQ_NO IRQNumber, uint8_t EnorDi)
 			*NVIC_ISER2 |= (1 << (IRQNumber % 64U));
 		}
 		else{
-			// No applicable
+			// Not applicable
 		}
 	}
 	else{
@@ -354,7 +354,7 @@ void GPIO_IRQInterruptConfig(enum IRQ_NO IRQNumber, uint8_t EnorDi)
 			*NVIC_ICER2 |= (1 << (IRQNumber % 64U));
 		}
 		else{
-			// No applicable
+			// Not applicable
 		}
 	}
 }

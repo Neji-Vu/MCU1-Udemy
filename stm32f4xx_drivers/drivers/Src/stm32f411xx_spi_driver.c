@@ -304,6 +304,26 @@ void SPI_SendData(SPI_RegDef_t *pSPIx,uint8_t *pTxBuffer, uint32_t Len)
 	}
 }
 
+uint8_t SPI_SendDataIT(SPI_Handle_t *pSPIHandle,uint8_t *pTxBuffer, uint32_t Len)
+{
+	uint8_t state = pSPIHandle->TxState;
+
+	if(state != SPI_BUSY_IN_TX)
+	{
+		// 1. Save the Tx buffer address and Len information in some global variables
+		pSPIHandle->pTxBuffer = pTxBuffer;
+		pSPIHandle->TxLen = Len;
+		// 2. Mark the SPI state as busy in transmission so that
+		//    No other code can take over same SPI peripheral until transmission is over
+		pSPIHandle->TxState = SPI_BUSY_IN_TX;
+
+		// 3. Enable the TXEIE control bit to get interrupt whenever TXE flag is set in SR
+		pSPIHandle->pSPI->CR2 |= (1 << SPI_CR2_BIT_TXEIE);
+	}
+
+	return state;
+}
+
 /*********************************************************************
  * @fn      		  - SPI_ReceiveData
  *
@@ -343,4 +363,104 @@ void SPI_ReceiveData(SPI_RegDef_t *pSPIx, uint8_t *pRxBuffer, uint32_t Len)
 			Len -= 2U;
 		}
 	}
+}
+
+uint8_t SPI_ReceiveDataIT(SPI_Handle_t *pSPIHandle, uint8_t *pRxBuffer, uint32_t Len)
+{
+	uint8_t state = pSPIHandle->RxState;
+
+	if(state != SPI_BUSY_IN_RX)
+	{
+		// 1. Save the Rx buffer address and Len information in some global variables
+		pSPIHandle->pRxBuffer = pRxBuffer;
+		pSPIHandle->RxLen = Len;
+		// 2. Mark the SPI state as busy in reception so that
+		//    No other code can take over same SPI peripheral until reception is over
+		pSPIHandle->RxState = SPI_BUSY_IN_RX;
+		//3. Enable the RXNEIE control bit to get interrupt whenever RXNEIE flag is set in SR
+		pSPIHandle->pSPI->CR2 |= (1 << SPI_CR2_BIT_RXNEIE);
+	}
+
+	return state;
+
+}
+
+/*********************************************************************
+ * @fn      		  - SPI_IRQConfig
+ *
+ * @brief             -
+ *
+ * @param[in]         -
+ * @param[in]         -
+ * @param[in]         -
+ *
+ * @return            -
+ *
+ * @Note              -
+
+ */
+void SPI_IRQInterruptConfig(enum IRQ_NO IRQNumber, uint8_t EnorDi)
+{
+	if(EnorDi){
+		if(IRQNumber >= 0U && IRQNumber < 32U){
+			// 0-31 IRQs are set in ISR0 registers
+			*NVIC_ISER0 |= (1 << IRQNumber);
+		}
+		else if(IRQNumber >= 32U && IRQNumber < 64U){
+			// 32-63 IRQs are set in ISR1 registers
+			*NVIC_ISER1 |= (1 << (IRQNumber % 32U));
+		}
+		else if(IRQNumber >= 64U && IRQNumber < 96U){
+			// 64-95 IRQs are set in ISR2 registers
+			*NVIC_ISER2 |= (1 << (IRQNumber % 64U));
+		}
+		else{
+			// Not applicable
+		}
+	}
+	else{
+		if(IRQNumber >= 0U && IRQNumber < 32U){
+			// 0-31 IRQs are cleared in ISR0 registers
+			*NVIC_ICER0 |= (1 << IRQNumber);
+		}
+		else if(IRQNumber >= 32U && IRQNumber < 64U){
+			// 32-63 IRQs are cleared in ISR1 registers
+			*NVIC_ICER1 |= (1 << (IRQNumber % 32U));
+		}
+		else if(IRQNumber >= 64U && IRQNumber < 96U){
+			// 64-95 IRQs are cleared in ISR2 registers
+			*NVIC_ICER2 |= (1 << (IRQNumber % 64U));
+		}
+		else{
+			// Not applicable
+		}
+	}
+}
+
+/*********************************************************************
+ * @fn      		  - SPI_IRQPriorityConfig
+ *
+ * @brief             -
+ *
+ * @param[in]         -
+ * @param[in]         -
+ * @param[in]         -
+ *
+ * @return            -
+ *
+ * @Note              -
+
+ */
+void SPI_IRQPriorityConfig(enum IRQ_NO IRQNumber, uint8_t IRQPriority)
+{
+	// Identify the register position needed to configure
+	uint8_t reg_pos = IRQNumber / 4;
+	// Identify the register section of register needed to configure
+	uint8_t reg_section = IRQNumber % 4;
+
+	// Shift No implemented bits in Interrupt Priortity
+	uint8_t shift_amount = (reg_section * 8) + (8 - NO_PR_BITS_IMPLEMENTED);
+
+	// Configure the priority to IPR
+	*(NVIC_IPR_BASEADDR + reg_pos) |= (IRQPriority << shift_amount);
 }
