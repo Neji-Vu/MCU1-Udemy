@@ -209,6 +209,20 @@ typedef struct
 	__vo uint32_t I2SPR;		/* Offset: 0x20, SPI_I2S prescaler register */
 }SPI_RegDef_t;
 
+typedef struct
+{
+	__vo uint32_t CR1;			/* Offset: 0x00, Control register 1 */
+	__vo uint32_t CR2;			/* Offset: 0x04, Control register 2 */
+	__vo uint32_t OAR1;			/* Offset: 0x08, Own address register 1 */
+	__vo uint32_t OAR2;			/* Offset: 0x0C, Own address register 2 */
+	__vo uint32_t DR;			/* Offset: 0x10, Data register */
+	__vo uint32_t SR1;			/* Offset: 0x14, Status register 1 */
+	__vo uint32_t SR2;			/* Offset: 0x18, Status register 2 */
+	__vo uint32_t CCR;			/* Offset: 0x1C, Clock control register */
+	__vo uint32_t TRISE;		/* Offset: 0x20, TRISE register */
+	__vo uint32_t FLTR;			/* Offset: 0x24, FLTR register */
+}I2C_RegDef_t;
+
 /*
  * Peripheral definitions (Peripheral base addresses typecasted to xxx_RegDef_t
  */
@@ -228,6 +242,9 @@ typedef struct
 #define SPI3					((SPI_RegDef_t*) SPI3_BASEADDR)
 #define SPI4					((SPI_RegDef_t*) SPI4_BASEADDR)
 #define SPI5					((SPI_RegDef_t*) SPI5_BASEADDR)
+#define I2C1					((I2C_RegDef_t*) I2C1_BASEADDR)
+#define I2C2					((I2C_RegDef_t*) I2C2_BASEADDR)
+#define I2C3					((I2C_RegDef_t*) I2C3_BASEADDR)
 
 /*
  * Clock Enable Macros for GPIOx peripherals
@@ -392,5 +409,6 @@ enum IRQ_NO{
 
 #include "stm32f411xx_gpio_driver.h"
 #include "stm32f411xx_spi_driver.h"
+#include "stm32f411xx_i2c_driver.h"
 
 #endif /* INC_STM32F411XX_H_ */
