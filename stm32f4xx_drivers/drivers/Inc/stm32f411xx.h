@@ -11,6 +11,7 @@
 #include <stdint.h>
 
 #define __vo volatile
+#define __weak __attribute__((weak))
 
 /*
  * Base addresses of FLASH and SRAM memories
@@ -379,6 +380,9 @@ enum IRQ_NO{
 	IRQ_NO_SPI5					= 85U
 };
 
+/************************************************************************************/
+/* Bit position definitions of SPI peripheral										*/
+/************************************************************************************/
 /*
  * Bit fields of SPI CR1 register
  */
@@ -406,6 +410,67 @@ enum IRQ_NO{
 #define SPI_SR_BIT_RXNE			0U
 #define SPI_SR_BIT_TXE			1U
 #define SPI_SR_BIT_BSY			7U
+
+/************************************************************************************/
+/* Bit position definitions of I2C peripheral										*/
+/************************************************************************************/
+/*
+ * Bit position definitions I2C_CR1
+ */
+#define I2C_CR1_BIT_PE			0U
+#define I2C_CR1_BIT_NOSTRETCH	7U
+#define I2C_CR1_BIT_START		8U
+#define I2C_CR1_BIT_STOP		9U
+#define I2C_CR1_BIT_ACK			10U
+#define I2C_CR1_BIT_SWRST		15U
+
+/*
+ * Bit position definitions I2C_CR2
+ */
+#define I2C_CR2_BIT_FREQ		0U
+#define I2C_CR2_BIT_ITERREN		8U
+#define I2C_CR2_BIT_ITEVTEN		9U
+#define I2C_CR2_BIT_ITBUFEN		10U
+
+/*
+ * Bit position definitions I2C_OAR1
+ */
+#define I2C_OAR1_BIT_ADD0		0U
+#define I2C_OAR1_BIT_ADD71		1U
+#define I2C_OAR1_BIT_ADD98		8U
+#define I2C_OAR1_BIT_ADDMODE	15U
+
+/*
+ * Bit position definitions I2C_SR1
+ */
+#define I2C_SR1_BIT_SB			0U
+#define I2C_SR1_BIT_ADDR		1U
+#define I2C_SR1_BIT_BTF			2U
+#define I2C_SR1_BIT_ADD10		3U
+#define I2C_SR1_BIT_STOPF		4U
+#define I2C_SR1_BIT_RXNE		6U
+#define I2C_SR1_BIT_TXE			7U
+#define I2C_SR1_BIT_BERR		8U
+#define I2C_SR1_BIT_ARLO		9U
+#define I2C_SR1_BIT_AF			10U
+#define I2C_SR1_BIT_OVR			11U
+#define I2C_SR1_BIT_TIMEOUT		14U
+
+/*
+ * Bit position definitions I2C_SR2
+ */
+#define I2C_SR2_BIT_MSL			0U
+#define I2C_SR2_BIT_BUSY		1U
+#define I2C_SR2_BIT_TRA			2U
+#define I2C_SR2_BIT_GENCALL		4U
+#define I2C_SR2_BIT_DUALF		7U
+
+/*
+ * Bit position definitions I2C_CCR
+ */
+#define I2C_CCR_BIT_CCR			0U
+#define I2C_CCR_BIT_DUTY		14U
+#define I2C_CCR_BIT_FS			15U
 
 #include "stm32f411xx_gpio_driver.h"
 #include "stm32f411xx_spi_driver.h"
