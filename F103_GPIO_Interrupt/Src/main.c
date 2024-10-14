@@ -19,12 +19,14 @@
 #include <stdint.h>
 
 #define ZeroPointFiveSecond 250000
-#define OneSeconde 			500000
-#define TowSeconde 			1000000
+#define OneSecond 			500000
+#define TowSecond 			1000000
 
 #define IOPCEN_BIT			4U
 
 #define RCC_BASE_ADDR		0x40021000
+#define RCC_CR				(RCC_BASE_ADDR + 0x00)
+#define RCC_CFGR			(RCC_BASE_ADDR + 0x04)
 #define RCC_APB2ENR			(RCC_BASE_ADDR + 0x18)
 
 #define GPIOC_BASE_ADDR		0x40011000
@@ -35,14 +37,31 @@
 #define GPIOC_ODR			(GPIOC_BASE_ADDR + 0x0C)
 #define GPIOC_IDR			(GPIOC_BASE_ADDR + 0x08)
 
+#define GPIOA_BASE_ADDR		0x40010800
+#define GPIOA_CRL			(GPIOA_BASE_ADDR + 0x00)
+#define GPIOA_CRH			(GPIOA_BASE_ADDR + 0x04)
+#define GPIOA_BSRR			(GPIOA_BASE_ADDR + 0x10)
+#define GPIOA_BRR			(GPIOA_BASE_ADDR + 0x14)
+#define GPIOA_ODR			(GPIOA_BASE_ADDR + 0x0C)
+#define GPIOA_IDR			(GPIOA_BASE_ADDR + 0x08)
+
 #define AFIO_BASE_ADDR		0x40010000
 #define AFIO_MAPR			(AFIO_BASE_ADDR + 0x04)
+#define AFIO_EXTICR4		(AFIO_BASE_ADDR + 0x14)
+
+#define EXTI				0x40010400
+#define	EXTI_IMR			(EXTI + 0x00)
+#define	EXTI_RTSR			(EXTI + 0x08)
+#define	EXTI_PR				(EXTI + 0x14)
+
+// Processor side
+#define NVIC_ISER0			0xE000E100
 
 #if !defined(__SOFT_FP__) && defined(__ARM_FP)
   #warning "FPU is not initialized, but the project is compiling for an FPU. Please initialize the FPU before use."
 #endif
 
-void delay(uint32_t tick){
+void Delay(uint32_t tick){
 	for(uint32_t i = 0U; i < tick; ++i){
 
 	}
@@ -94,13 +113,50 @@ void PressToTurnLedOff(void){
 	}
 }
 
-void ConfigPC14AsEXTIPin(void){
+void ConfigInterruptForPC14Pin(void){
 	// Set as raising edge
+	*(uint32_t*)EXTI_RTSR |= (0x1U << 14U);
+
+	// Enable the interrupt mask for EXTI14 line
+	*(uint32_t*)EXTI_IMR |= (0x1U << 14U);
+
+	// Enable the interrupt in the processor side
+	// EXTI14 => IRQ number is 40
+	uint32_t *NVIC_ISER = (uint32_t*)NVIC_ISER0 + (40/32);
+	*NVIC_ISER |= (1 << (40%32));
+}
+
+void ConfigPC14AsEXTIPin(void){
+	// Set the EXTI14 line for PC14
+	*(uint32_t*)AFIO_EXTICR4 |= (0x2U << 8U);
+
+	ConfigInterruptForPC14Pin();
+}
+
+void ConfigHSEClock(void){
+	// Turn HSE On
+	*(uint32_t*)RCC_CR |= (1U << 16U);
+
+	// While until HSE is ready
+	while(!((*(uint32_t*)RCC_CR >> 17U) & 1U));
+
+	// Change the system clock into HSE
+	*(uint32_t*)RCC_CFGR |= (1U << 0U);
+}
+
+void ConfigPA8AsMCOPin(void){
+	// Set PA8 as MCO pin output
+	*(uint32_t*)GPIOA_CRH &= ~(0xFU << 0U);
+	*(uint32_t*)GPIOA_CRH |= (0x1U << 0U);
+	*(uint32_t*)GPIOA_CRH |= (0x2U << 2U);
+
+	// Select HSE clock to the MCO pin
+	*(uint32_t*)RCC_CFGR |= (0x6U << 24U);
 }
 
 int main(void)
 {
-	// Enable RCC to generate the clock
+	// Enable RCC to generate the clock for the GPIOC
 	*(uint32_t*)RCC_APB2ENR |= (1U << IOPCEN_BIT);
 
 	/* For SWD Debug */
@@ -111,11 +167,33 @@ int main(void)
 	*(uint32_t*)GPIOC_CRH |= (0x2U << 20U);
 
 	// Set mode for PC14 as Button input pull downpin
-	SetPC14AsInputPullDown();
+	// SetPC14AsInputPullDown();
+
+	// Set interrupt in PC14 line
+	ConfigPC14AsEXTIPin();
+
+	// Config system clock as HSE
+	ConfigHSEClock();
+
+	// Set HSE clock to MCO Pin
+	if(((*(uint32_t*)RCC_CFGR >> 2U) & 0x3U) == 0x1){
+		ConfigPA8AsMCOPin();
+	}
 
     /* Loop forever */
 	while(1)
 	{
-		PressToTurnLedOff();
+//		PressToTurnLedOff();
+		TurnLedOn(13);
 	}
+}
+
+void EXTI15_10_IRQHandler(void){
+	// Turn On LED
+	TurnLedOff(13);
+	// Delay 1s
+	Delay(OneSecond);
+
+	// Disable PR Interrupt register to out the Interrupt
+	*(uint32_t*)EXTI_PR |= (1U << 14U);
 }
