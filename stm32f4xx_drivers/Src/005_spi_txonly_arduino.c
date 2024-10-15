@@ -78,8 +78,8 @@ void SPI2_Inits(void)
 	SPI2handle.SPI_Config.SPI_DeviceMode 	= SPI_DEVICE_MODE_MASTER;
 	SPI2handle.SPI_Config.SPI_SclkSpeed 	= SPI_SCLK_SPEED_DIV8; // Generates sclk of 2MHz
 	SPI2handle.SPI_Config.SPI_DFF 			= SPI_DFF_8BITS;
-	SPI2handle.SPI_Config.SPI_CPOL 			= SPI_CPOL_LOW;
-	SPI2handle.SPI_Config.SPI_CPHA 			= SPI_CPHA_LOW;
+	SPI2handle.SPI_Config.SPI_CPOL 			= SPI_CPOL_HIGH;
+	SPI2handle.SPI_Config.SPI_CPHA 			= SPI_CPHA_HIGH;
 	SPI2handle.SPI_Config.SPI_SSM 			= SPI_SSM_DI; // Hardware slave management enabled for NSS pin
 
 	SPI_Init(&SPI2handle);
