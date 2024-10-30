@@ -57,6 +57,17 @@ static void SPI1_Config(void){
 
 }
 
+void SPI_ReceiveData(uint8_t *data, uint8_t len){
+	while(len > 0){
+		while(!((SPI1->SR >> 1) & 1));
+		SPI1->DR = 0xFFU; // Send dummy data
+		while(!((SPI1->SR >> 0) & 1));
+		*data = SPI1->DR;
+		data++;
+		len--;
+	}
+}
+
 /**
   * @brief System Clock Configuration
   * @retval None
